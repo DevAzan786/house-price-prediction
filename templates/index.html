@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Islamabad House Price Predictor</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=swap">
+    <!-- Include Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f0f0f0;
+            color: #333;
+            transition: background-color 0.3s, color 0.3s;
+        }
+        .dark-mode {
+            background-color: #1d1d1d;
+            color: #f0f0f0;
+        }
+        .navbar {
+            background-color: #2d3e50;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 15px 20px;
+            position: relative;
+        }
+        .navbar .title {
+            font-size: 28px;
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            margin: 0;
+            text-align: center;
+        }
+        .navbar .social-icons {
+            display: flex;
+            gap: 20px;
+        }
+        .navbar .social-icons a {
+            color: white;
+            font-size: 24px;
+            text-decoration: none;
+        }
+        .navbar .social-icons a:hover {
+            color: #405c74;
+        }
+        .dark-mode-toggle {
+            font-size: 24px;
+            cursor: pointer;
+            color: white;
+        }
+        .dark-mode-toggle:hover {
+            color: #ccc;
+        }
+        .container {
+            max-width: 800px;
+            margin: 80px auto 30px;
+            padding: 30px;
+            border-radius: 10px;
+            background-color: #ffffff;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+            background-color: #f8f8f8;
+            transition: background-color 0.3s, color 0.3s;
+        }
+        .dark-mode .container {
+            background-color: #2b2b2b;
+            color: #f0f0f0;
+        }
+        h2 {
+            text-align: center;
+            color: #2d3e50;
+            margin-bottom: 30px;
+        }
+        .dark-mode h2 {
+            color: #f0f0f0;
+        }
+        .tagline {
+            text-align: center;
+            color: #666;
+            font-size: 18px;
+            margin-bottom: 20px;
+            font-style: italic;
+        }
+        .dark-mode .tagline {
+            color: #bbb;
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        label {
+            font-weight: 500;
+            margin-bottom: 8px;
+            display: block;
+        }
+        input, select {
+            width: 100%;
+            padding: 12px;
+            margin-top: 8px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            font-size: 16px;
+            box-sizing: border-box;
+        }
+        button {
+            width: 100%;
+            padding: 14px;
+            background-color: #2d3e50;
+            color: white;
+            font-size: 18px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            margin-top: 20px;
+        }
+        button:hover {
+            background-color: #405c74;
+        }
+        .result {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 24px;
+            font-weight: bold;
+            color: #333;
+        }
+        .dark-mode .result {
+            color: #f0f0f0;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="navbar">
+        <div class="title">Islamabad House Price Predictor</div>
+        <div class="social-icons">
+            <a href="https://github.com/DevAzan786" target="_blank" title="GitHub"><i class="fab fa-github"></i></a>
+            <a href="https://www.linkedin.com/in/malikazan/" target="_blank" title="LinkedIn"><i class="fab fa-linkedin"></i></a>
+            <a href="https://www.kaggle.com/azanalimalik" target="_blank" title="Kaggle"><i class="fab fa-kaggle"></i></a>
+        </div>
+        <div class="dark-mode-toggle" title="Toggle Dark Mode" onclick="toggleDarkMode()">
+            <i class="fas fa-moon"></i>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="tagline">Get accurate house price predictions based on your inputs!</div>
+        <h2>Enter House Details</h2>
+        <form id="predictForm">
+            <div class="form-group">
+                <label for="baths">Number of Bathrooms:</label>
+                <input type="number" id="baths" name="baths" required>
+            </div>
+
+            <div class="form-group">
+                <label for="purpose">Purpose:</label>
+                <select id="purpose" name="purpose" required>
+                    <option value="0">Rent</option>
+                    <option value="1">Sale</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="bedrooms">Number of Bedrooms:</label>
+                <input type="number" id="bedrooms" name="bedrooms" required>
+            </div>
+
+            <div class="form-group">
+                <label for="area_type">Area Type:</label>
+                <select id="area_type" name="area_type" required>
+                    <option value="1">Marla</option>
+                    <option value="0">Kanal</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="area">Area:</label>
+                <input type="number" id="area" name="area" required>
+            </div>
+
+            <div class="form-group">
+                <label for="location">Location:</label>
+                <select id="location" name="location" required>
+                    {% for location in locations %}
+                        <option value="{{ loop.index0 }}">{{ location }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <button type="submit">Predict Price</button>
+        </form>
+
+        <div id="result" class="result"></div>
+    </div>
+
+    <script>
+        document.getElementById("predictForm").addEventListener("submit", function(event) {
+            event.preventDefault();
+
+            const formData = new FormData(event.target);
+
+            fetch("/predict", {
+                method: "POST",
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                const resultDiv = document.getElementById("result");
+                if (data.error) {
+                    resultDiv.textContent = `Error: ${data.error}`;
+                    resultDiv.style.color = "red";
+                } else {
+                    resultDiv.textContent = `Predicted Price: ${data.predicted_price}`;
+                    resultDiv.style.color = "green";
+                }
+            })
+            .catch(error => {
+                console.error("Error:", error);
+                document.getElementById("result").textContent = "An error occurred.";
+            });
+        });
+
+        function toggleDarkMode() {
+            const body = document.body;
+            body.classList.toggle('dark-mode');
+            const icon = document.querySelector('.dark-mode-toggle i');
+            if (body.classList.contains('dark-mode')) {
+                icon.classList.remove('fa-moon');
+                icon.classList.add('fa-sun');
+            } else {
+                icon.classList.remove('fa-sun');
+                icon.classList.add('fa-moon');
+            }
+        }
+    </script>
+</body>
+</html>
